@@ -1,0 +1,28 @@
+---
+networks:
+  macvlan_network:
+    external: true
+    name: "${DOCKER_NETWORK}"
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+      - "PUID=1000"
+      - "PGID=1000"
+      - "TZ=${TIMEZONE}"
+      - "JELLYFIN_PublishedServerUrl=${IP_ADDRESS}"
+    volumes:
+      - "${JELLYFIN_CONFIG}:/config"
+      - "${SONARR}:/data/tv:ro"
+      - "${RADARR}:/data/movies:ro"
+      - "${OTHER}:/data/other:ro"
+    restart: always
+    networks:
+      macvlan_network:
+        ipv4_address: "${IP_ADDRESS}"
+    deploy:
+      resources:
+        limits:
+          memory: "${JELLYFIN_MEM_LIMIT}"
