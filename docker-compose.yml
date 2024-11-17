@@ -7,6 +7,7 @@ networks:
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin
+    pull_policy: always
     container_name: jellyfin
     environment:
       - "PUID=1000"
